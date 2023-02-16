@@ -1,1 +1,19 @@
 
+#!/usr/bash
+## fastq-dump sra into fastq
+## input sra_list
+set -euo pipefail
+#runlog
+RUNLOG=fastq_dump_log.txt
+##SRR list
+input=$1 ##SRR_ACC_list.txt
+output=$2 ##output directory
+echo "Run by `whoami` on `date`" >> ${output}/${RUNLOG}
+##downloading
+cat ${input} | while read i
+do
+	if [ ! -f ${i}*.fastq.gz ]; then
+
+		time fastq-dump --gzip --split-files ${i} && echo "** ${i} to fastq done **" >>${output}/fastq_dump_log.txt
+	fi
+done
